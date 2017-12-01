@@ -1,0 +1,66 @@
+
+;; This is a small problem instance for the standard Logistics domain,
+;; as defined in "logistic.pddl".
+
+(define (problem C3_2)
+  (:domain logistics)
+  (:objects
+   city1 city2 city3          		;; there are three cities,
+   truck1 truck2 truck3       		;; one truck in each city,
+   smalltruck1 smalltruck2 smalltruck3	;; one small truck in each city
+   airplane1                  		;; only one airplane,
+   office1 office2 office3    		;; offices are "non-airport" locations
+   airport1 airport2  			;; airports, one per city,except city 2
+   smallpacket1 smallpacket2 bigpacket  ;; two packages to be delivered
+   train1  	      			;; only one train
+   trainstation1 trainstation2  	;; there are two trainstations
+   )
+  (:init
+   ;; Type declarations:
+   (smallobject smallpacket1) (smallobject smallpacket2) (bigobject bigpacket)
+
+   ;; all vehicles must be declared as both "vehicle" and their
+   ;; appropriate subtype,
+   (vehicle truck1) (vehicle truck2) (vehicle truck3) 
+   (vehicle smalltruck1) (vehicle smalltruck2) (vehicle smalltruck3)
+   (vehicle airplane1)
+   (vehicle train1) (vehicle train2) 
+   (truck truck1) (truck truck2) (truck truck3) 
+   (smalltruck smalltruck1) (smalltruck smalltruck2) (smalltruck smalltruck3)
+   (airplane airplane1) 
+   (train train1) 
+
+   ;; likewise, airports must be declared both as "location" and as
+   ;; the subtype "airport",
+   (location office1) (location office2) (location office3)
+   (location airport1) (location airport2) 
+   (location trainstation1) (location trainstation2) 
+   (airport airport1) (airport airport2) 
+   (trainstation trainstation1) (trainstation trainstation2) 
+   (city city1) (city city2) (city city3)
+
+   ;; "loc" defines the topology of the problem,
+   ;; Planes can only travel to city 1 & 3
+   ;; Trains can only travel to city 2 & 3
+   (loc office1 city1) (loc airport1 city1) 
+   (loc office2 city2) (loc trainstation1 city2)
+   (loc office3 city3) (loc airport3 city3) (loc trainstation2 city3)
+
+   ;; The actual initial state of the problem, which specifies the
+   ;; initial locations of all packages and all vehicles:
+   (at smallpacket1 office1)
+   (at smallpacket2 office2)
+   (at bigpacket office3)
+   (at truck1 airport1)
+   (at truck2 office2)
+   (at truck3 trainstation2)
+   (at smalltruck1 office1)
+   (at smalltruck2 trainstation1)
+   (at smalltruck3 office3)
+   (at airplane1 airport1)
+   (at train1 trainstation1)
+   )
+
+  ;; The goal is to have both packages delivered to their destinations:
+  (:goal (and (at bigpacket office2) (at smallpacket1 office3) (at smallpacket2 office1))
+  )
